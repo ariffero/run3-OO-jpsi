@@ -1,0 +1,2 @@
+# Coherent J/&psi; at fwd rapidity in OO collisions
+This repository contains the macro used for the measurement of the cross section of coherent J/&psi; decaying into muons at forward rapidity in Oxygen-Oxygen collisions. Done using ALICE Run 3 O--O UPC data.
