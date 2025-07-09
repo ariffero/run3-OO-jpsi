@@ -2,6 +2,7 @@
 
 import os
 import sys
+import shutil
 import argparse
 
 
@@ -20,7 +21,7 @@ def main():
     group.add_argument(
         '-d', '--data',
         dest='data_file',
-        help='Path to input data file, e.g. train-xxx/AO2D.root'
+        help='Path to input data file, e.g. dd1/AO2D.root'
     )
 
     parser.add_argument(
@@ -34,7 +35,7 @@ def main():
         dest='data_type',
         choices=['reco', 'gen', 'data'],
         default='reco',
-        help='Data type: reco, gen, or data (default: reco). Depending on the type, a config file for saving the tables with the name <data-type>-tree.json is required'
+        help='Data type: reco, gen, or data (default: reco)'
     )
     parser.add_argument(
         '-n', '--dry-run',
@@ -76,30 +77,37 @@ def main():
         print('Error: Missing required file(s):', ', '.join(missing))
         sys.exit(1)
 
+        # Copy writer JSON config from utilities to cwd (always needed for saving trees)
+    writer_json_src = tree_json
+    writer_json_dst = os.path.join(cwd, f'tree-{data_type}.json')
+    shutil.copy(writer_json_src, writer_json_dst)
+
+    # Build analysis command
+    writer_json_src = tree_json
+    writer_json_dst = os.path.join(cwd, f'tree-{data_type}.json')
+    if use_config:
+        shutil.copy(writer_json_src, writer_json_dst)
+    # else: assume writer_json already exists or generated
+
     # Build analysis command
     if use_config:
-        # Writer JSON lives next to data.json in cwd
-        writer_json = os.path.join(cwd, f'tree-{data_type}.json')
         cmd_analysis = (
             f"{script} --configuration json://{json_path} "
-            f"--aod-writer-json {writer_json} -b"
+            f"--aod-writer-json {writer_json_dst} -b"
         )
         base = os.path.splitext(os.path.basename(json_file))[0]
         output_root = os.path.join(cwd, f"{base}-AnalysisResults.root")
         merge_output = f"{base}-tree.root"
     else:
-        writer_json = os.path.join(cwd, f'tree-{data_type}.json')
+        writer_json = writer_json_dst
         cmd_analysis = (
             f"{script} --aod-file {data_path} "
             f"--aod-writer-json {writer_json} -b"
         )
         output_root = os.path.join(cwd, 'AnalysisResults.root')
-        if data_type == 'data':
-            merge_output = 'data-tree.root'
-        else:
-            merge_output = f"{data_type}-tree.root"
+        merge_output = 'data-tree.root' if data_type=='data' else f"{data_type}-tree.root"
 
-    # Merge command: only filename for output
+    # Merge command
     cmd_merge = (
         f"o2-aod-merger --input {in_list} --output {merge_output} --max-size 1000000000"
     )
@@ -109,8 +117,8 @@ def main():
     for f in required:
         print(f'  - {f}')
     print('\nCommands to be executed:')
-    print(f'Analysis: {cmd_analysis}')
-    print(f'Merge:    {cmd_merge}\n')
+    print(f'  Analysis: {cmd_analysis}')
+    print(f'  Merge:    {cmd_merge}\n')
     if dry_run:
         print('Dry-run mode: no commands will be executed.')
         sys.exit(0)
@@ -135,9 +143,16 @@ def main():
         print(f"Error: Merging trees failed with exit code {ret_merge}")
         sys.exit(ret_merge)
 
-    # Cleanup intermediate
+    # Cleanup
     try:
         os.remove(os.path.join(cwd, 'dimu.root'))
+    except FileNotFoundError:
+        pass
+
+    # Remove temporary writer JSON copy
+    writer_json_dst = os.path.join(cwd, f'tree-{data_type}.json')
+    try:
+        os.remove(writer_json_dst)
     except FileNotFoundError:
         pass
 
