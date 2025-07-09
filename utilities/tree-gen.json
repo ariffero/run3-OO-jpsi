@@ -1,0 +1,17 @@
+{
+  "OutputDirector": {
+    "debugmode": false,
+    "resdir": ".",
+    "resfile": "dimu",
+    "resfilemode": "RECREATE",
+    "maxfilesize": -1,
+    "ntfmerge": -1,
+      "OutputDescriptors": [
+          {
+            "table": "AOD/GENDIMU/0",
+            "treename": "dimu",
+            "filename": "dimu"
+          }
+      ]
+  }
+}
