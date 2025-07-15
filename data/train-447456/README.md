@@ -1,0 +1,5 @@
+# Data from train n. 447456
+The train was run on HY: the corresponding wagon is `UPCCandidateProducerOO` that runs the task `UPCCandidateProducer` with service wagons `eventSelectionService` and `UD_fwdtrack-propagation`, on the dataset `LHC25ae_cpass0_QC1`, that contains all the OO cpass0 (approx ~76% of the total luminosity).
+
+The data have been downloaded using the script `download-447456.sh`.
+The file `file_list.txt` contains the directories of all the downloaded `AO2D.root`. There are also files like `file_list_x.txt`, where `x` is a number, that contain a part of the total directories, and are used to run over a small part of the data; this is necassary to run the task without saturating the RAM. The configuration files follow the same idea, they are all the same apart from the input data, and the final number indicates the subset (e.g. `data-OO-full-pt-1.json`). The results are merged togher using the `o2-aod-merger` on the file `merge-list.txt` to obtain the file with all the trees `merged-trees.root`.

@@ -1,0 +1,2 @@
+~/Desktop/run3-OO-jpsi/data/train-447456/hy_2386305/001/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-447456/hy_2386305/002/AO2D.root
