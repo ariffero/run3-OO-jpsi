@@ -1,5 +1,6 @@
 //
 // Created by Roman Lavička on 03.03.2024.
+// Updated by Andrea Giovanni Riffero
 //
 
 
@@ -9,24 +10,32 @@ void getLumi(string filename = "AnalysedLumi.root"){
 	TFile *f = TFile::Open(Form("%s",filename.c_str()), "read");
 	Double_t systunc = 0.039; // https://alice-notes.web.cern.ch/node/1515
 
+	string dir_new = "lumi-task";
+	string dir_old = "eventselection-run3/luminosity";
+	string dir = "";
 	if (f){
-		TH1F *hLumiTVX  = (TH1F*) f->Get("lumi-task/hLumiTVX");
-		TH1F *hLumiTCE  = (TH1F*) f->Get("lumi-task/hLumiTCE");
-		TH1F *hLumiZEM  = (TH1F*) f->Get("lumi-task/hLumiZEM");
-		TH1F *hLumiZNC  = (TH1F*) f->Get("lumi-task/hLumiZNC");
-		TH1F *hLumiTVXafterBCcuts  = (TH1F*) f->Get("lumi-task/hLumiTVXafterBCcuts");
-		TH1F *hLumiTCEafterBCcuts  = (TH1F*) f->Get("lumi-task/hLumiTCEafterBCcuts");
-		TH1F *hLumiZEMafterBCcuts  = (TH1F*) f->Get("lumi-task/hLumiZEMafterBCcuts");
-		TH1F *hLumiZNCafterBCcuts  = (TH1F*) f->Get("lumi-task/hLumiZNCafterBCcuts");
+		TH1F *hLumiTCE  = (TH1F*) f->Get(Form("%s/hLumiTCE",dir_old.c_str()));
+		if (hLumiTCE != NULL) dir = dir_old;
+		else dir = dir_new;
+	}
+	if (f){
+		TH1F *hLumiTVX  = (TH1F*) f->Get(Form("%s/hLumiTVX",dir.c_str()));
+		TH1F *hLumiTCE  = (TH1F*) f->Get(Form("%s/hLumiTCE",dir.c_str()));
+		TH1F *hLumiZEM  = (TH1F*) f->Get(Form("%s/hLumiZEM",dir.c_str()));
+		TH1F *hLumiZNC  = (TH1F*) f->Get(Form("%s/hLumiZNC",dir.c_str()));
+		TH1F *hLumiTVXafterBCcuts  = (TH1F*) f->Get(Form("%s/hLumiTVXafterBCcuts",dir.c_str()));
+		TH1F *hLumiTCEafterBCcuts  = (TH1F*) f->Get(Form("%s/hLumiTCEafterBCcuts",dir.c_str()));
+		TH1F *hLumiZEMafterBCcuts  = (TH1F*) f->Get(Form("%s/hLumiZEMafterBCcuts",dir.c_str()));
+		TH1F *hLumiZNCafterBCcuts  = (TH1F*) f->Get(Form("%s/hLumiZNCafterBCcuts",dir.c_str()));
 		TH1F *hTriggerTCEupcCand  = (TH1F*) f->Get("upc-cand-producer/hCountersTrg");
-		TH1F *hCounterTVX  = (TH1F*) f->Get("lumi-task/hCounterTVX");
-		TH1F *hCounterTCE  = (TH1F*) f->Get("lumi-task/hCounterTCE");
-		TH1F *hCounterZEM  = (TH1F*) f->Get("lumi-task/hCounterZEM");
-		TH1F *hCounterZNC  = (TH1F*) f->Get("lumi-task/hCounterZNC");
-		TH1F *hCounterTVXafterBCcuts  = (TH1F*) f->Get("lumi-task/hCounterTVXafterBCcuts");
-		TH1F *hCounterTCEafterBCcuts  = (TH1F*) f->Get("lumi-task/hCounterTCEafterBCcuts");
-		TH1F *hCounterZEMafterBCcuts  = (TH1F*) f->Get("lumi-task/hCounterZEMafterBCcuts");
-		TH1F *hCounterZNCafterBCcuts  = (TH1F*) f->Get("lumi-task/hCounterZNCafterBCcuts");
+		TH1F *hCounterTVX  = (TH1F*) f->Get(Form("%s/hCounterTVX",dir.c_str()));
+		TH1F *hCounterTCE  = (TH1F*) f->Get(Form("%s/hCounterTCE",dir.c_str()));
+		TH1F *hCounterZEM  = (TH1F*) f->Get(Form("%s/hCounterZEM",dir.c_str()));
+		TH1F *hCounterZNC  = (TH1F*) f->Get(Form("%s/hCounterZNC",dir.c_str()));
+		TH1F *hCounterTVXafterBCcuts  = (TH1F*) f->Get(Form("%s/hCounterTVXafterBCcuts",dir.c_str()));
+		TH1F *hCounterTCEafterBCcuts  = (TH1F*) f->Get(Form("%s/hCounterTCEafterBCcuts",dir.c_str()));
+		TH1F *hCounterZEMafterBCcuts  = (TH1F*) f->Get(Form("%s/hCounterZEMafterBCcuts",dir.c_str()));
+		TH1F *hCounterZNCafterBCcuts  = (TH1F*) f->Get(Form("%s/hCounterZNCafterBCcuts",dir.c_str()));
 		if (hLumiTVX){
 			Double_t lumi = 0.0;
 			for (int ibin(1);ibin <= hLumiTVX->GetNbinsX();ibin++){
