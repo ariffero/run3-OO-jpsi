@@ -67,6 +67,27 @@ def main():
     if use_config:
         json_path = os.path.join(cwd, json_file)
         required.append(json_path)
+        # Check for 'aod-file-private' in the correct nested location
+        with open(json_path, 'r') as jf:
+            try:
+                import json as _json
+                config = _json.load(jf)
+            except Exception as e:
+                print(f'Error: Could not parse config JSON: {e}')
+                sys.exit(1)
+            # Check for 'aod-file-private' under 'internal-dpl-aod-reader'
+            reader = config.get('internal-dpl-aod-reader', {})
+            aod_file_private = reader.get('aod-file-private', None)
+            if not aod_file_private or str(aod_file_private).strip() == "":
+                print(f"Error: 'aod-file-private' is missing or empty {json_path} in config JSON.")
+                sys.exit(1)
+            # Remove leading '@' if present
+            file_ref = str(aod_file_private).lstrip('@')
+            abs_input_path = os.path.join(cwd, file_ref) if not os.path.isabs(file_ref) else file_ref
+            if not os.path.isfile(abs_input_path):
+                print(f"Error: Input file specified in config ('aod-file-private'): {abs_input_path} not found.")
+                sys.exit(1)
+            required.append(abs_input_path)
     else:
         data_path = os.path.join(cwd, data_file)
         required.append(data_path)
@@ -74,10 +95,13 @@ def main():
     # Check for missing inputs
     missing = [f for f in required if not os.path.isfile(f)]
     if missing:
-        print('Error: Missing required file(s):', ', '.join(missing))
-        sys.exit(1)
+      print('Error: Missing required file(s):', ', '.join(missing))
+      sys.exit(1)
+    print('Input files verified:')
+    for f in required:
+      print(f'  - {f}')
 
-        # Copy writer JSON config from utilities to cwd (always needed for saving trees)
+    # Copy writer JSON config from utilities to cwd (always needed for saving trees)
     writer_json_src = tree_json
     writer_json_dst = os.path.join(cwd, f'tree-{data_type}.json')
     shutil.copy(writer_json_src, writer_json_dst)
@@ -113,9 +137,6 @@ def main():
     )
 
     # Report
-    print('Input files verified:')
-    for f in required:
-        print(f'  - {f}')
     print('\nCommands to be executed:')
     print(f'  Analysis: {cmd_analysis}')
     print(f'  Merge:    {cmd_merge}\n')
