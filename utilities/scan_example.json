@@ -1,0 +1,9 @@
+{
+  "base_config": "base-config.json",
+  "output_base": "xxx-scan",
+  "output_dir": "scan-results",
+  "scan_params": {
+    "highPt": [0.25, 0.5, 1.0],
+    "lowPt": [0.0, 0.1]
+  }
+}

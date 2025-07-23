@@ -9,3 +9,5 @@ This folder contains some files necessary to run other macros or scripts.
 3. **reco-tree.json** configuration file used to chose the tables to be save by the task, here for reconstructed MC, the name of the tables is different for different data types
 
 4. **gen-tree.json** configuration file used to chose the tables to be save by the task, here for generated MC, the name of the tables is different for different data types
+
+5. **scan_example.json** example of the configuration file needed to run `run-parameter-scan.py`.
