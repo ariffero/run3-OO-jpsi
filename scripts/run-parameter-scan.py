@@ -8,7 +8,6 @@ import csv
 
 # Recursively search for a key in a nested dictionary
 # Used for sanity check to ensure scan parameters exist in base config
-
 def find_key_recursive(d, key):
   """Return True if key exists anywhere in nested dict d."""
   if isinstance(d, dict):
@@ -19,7 +18,6 @@ def find_key_recursive(d, key):
 
 # Recursively set a key to a value in a nested dictionary
 # Used to update config for each scan run
-
 def set_key_recursive(d, key, value):
   """Set key to value anywhere in nested dict d."""
   if isinstance(d, dict):
@@ -109,7 +107,7 @@ def main():
     # Set scan parameters in config (recursively)
     for k, v in zip(param_names, values):
       set_key_recursive(config, k, v)
-    # Use dash for config file name
+
     config_name = f"{base_output_name}-{file_counter}.json"
     config_path = os.path.join(output_dir, config_name)
     with open(config_path, "w") as f:
@@ -138,17 +136,13 @@ def main():
     # Track new .root files produced by this run
     after_files = set(f for f in os.listdir('.') if f.endswith('.root'))
     new_files = after_files - before_files
-
-    # Move and rename all new .root files for this run
+    
+    # Move all new .root files for this run
     run_file_names = []
     for fname in new_files:
-      ext = os.path.splitext(fname)[1]
-      # Replace underscores in fname with dashes
-      dash_fname = fname.replace('_', '-')
-      new_name = f"{base_output_name}-{file_counter}-{dash_fname}"
-      dest = os.path.join(output_dir, new_name)
+      dest = os.path.join(output_dir, fname)
       shutil.move(fname, dest)
-      run_file_names.append(new_name)
+      run_file_names.append(fname)
     # Add the config json to the files list
     run_file_names.append(config_name)
     file_map[f"run-{file_counter}"] = {
