@@ -60,9 +60,37 @@ def main():
   # Path to the analysis script invoked for each parameter set
   run_task_script = os.path.expanduser("~/Desktop/run3-OO-jpsi/scripts/run-task.py")
 
-  # Load scan parameters and base configuration paths
-  with open(args.param_json, "r") as f:
-    param_dict = json.load(f)
+  # Verify CLI JSON file exists
+  if not os.path.isfile(args.param_json):
+    print(f"Error: parameter JSON file '{args.param_json}' not found.")
+    sys.exit(1)
+
+  # Load and validate JSON
+  try:
+    with open(args.param_json, "r") as f:
+      param_dict = json.load(f)
+  except json.JSONDecodeError as e:
+    print(f"Error: failed to parse JSON '{args.param_json}': {e}")
+    sys.exit(1)
+
+  # Check required keys
+  for key in ("base_config", "scan_params"):
+    if key not in param_dict:
+      print(f"Error: '{key}' missing in parameter JSON.")
+      sys.exit(1)
+
+  # scan_params must be a non-empty dict of lists
+  sp = param_dict["scan_params"]
+  if (not isinstance(sp, dict) or not sp or
+    any(not isinstance(v, list) or not v for v in sp.values())):
+    print("Error: 'scan_params' must be a non-empty dict of non-empty lists.")
+    sys.exit(1)
+
+  # Verify base_config file exists
+  base_cfg = param_dict["base_config"]
+  if not os.path.isfile(base_cfg):
+    print(f"Error: base config file '{base_cfg}' not found.")
+    sys.exit(1)
 
   scan_params = param_dict.get("scan_params", {})   # mapping param_name -> [values]
   base_config_file = param_dict.get("base_config")  # template JSON config
