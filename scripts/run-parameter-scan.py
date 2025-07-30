@@ -5,6 +5,7 @@ import argparse
 import itertools
 import shutil
 import csv
+import sys
 
 # Recursively search for a key in a nested dictionary
 # Used for sanity check to ensure scan parameters exist in base config
@@ -50,6 +51,7 @@ def main():
   parser.add_argument('--task-name', default=None, help='Name of the analysis task to run (passed to run-task.py --script). If not set, uses run-task.py default.')
   parser.add_argument('--data-type', default=None, help='Data type to pass to run-task.py (--data-type)')
   parser.add_argument('-n', '--dry-run', action='store_true', help='Print all commands that would be executed, but do not run them')
+  parser.add_argument('--log', action='store_true', help='Enable logging of terminal output to a file named <output_base>.log Note that an action is required from the terminal and it will be written in the log')
   args = parser.parse_args()        # parse and validate input flags
 
   # Path to the analysis script invoked for each parameter set
@@ -75,6 +77,20 @@ def main():
     os.makedirs(output_dir)
   with open(base_config_file, "r") as f:
     base_config = json.load(f)
+
+  # Setup logging to file if requested (captures all stdout/stderr including subprocesses)
+  if args.log:
+    log_filename = f"{base_output_name}.log"
+    log_path = os.path.join(output_dir, log_filename)
+    # Open log file in line-buffered mode to capture prints in real-time
+    log_file = open(log_path, 'w', buffering=1)
+    # Redirect OS-level stdout and stderr file descriptors (1 and 2)
+    os.dup2(log_file.fileno(), 1)  # stdout -> log_file
+    os.dup2(log_file.fileno(), 2)  # stderr -> log_file
+    # Also redirect Python-level streams in case modules write directly
+    sys.stdout = log_file
+    sys.stderr = log_file
+    print(f"Logging all output (including subprocesses) to {log_path}")
 
   # Extract parameter names and lists of values
   param_names = list(scan_params.keys())
