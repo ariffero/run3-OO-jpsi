@@ -52,6 +52,9 @@ def main():
   parser.add_argument('--data-type', default=None, help='Data type to pass to run-task.py (--data-type)')
   parser.add_argument('-n', '--dry-run', action='store_true', help='Print all commands that would be executed, but do not run them')
   parser.add_argument('--log', action='store_true', help='Enable logging of terminal output to a file named <output_base>.log Note that an action is required from the terminal and it will be written in the log')
+  parser.add_argument('-u', '--use-sub-jobs', action='store_true', help='Enable processing in sub-jobs via run-task subjob support')
+  parser.add_argument('--chunk-num', type=int, default=None, help='Number of items per chunk when using sub-jobs')
+  parser.add_argument('--chunk-max-size', type=float, default=None, help='Maximum data size (GB) per chunk when using sub-jobs')
   args = parser.parse_args()        # parse and validate input flags
 
   # Path to the analysis script invoked for each parameter set
@@ -141,6 +144,16 @@ def main():
       cmd += ["-s", args.task_name]
     if args.data_type:
       cmd += ["-t", args.data_type]
+    if args.use_sub_jobs:
+      cmd += ["-u"]
+      jobs_dest = os.path.join(output_dir, f"jobs-{file_counter}")
+      print("jobs_dest", jobs_dest)
+      cmd += ["--jobs-dir", jobs_dest]
+      if args.chunk_num is not None:
+        cmd += ["--chunk-num", str(args.chunk_num)]
+      if args.chunk_max_size is not None:
+        cmd += ["--chunk-max-size", str(args.chunk_max_size)]
+  
     print(f"\nRun {file_counter}:")
     print(f"  Parameters: {dict(zip(param_names, values))}")
     print(f"  Command: {' '.join(cmd)}")
