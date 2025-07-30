@@ -32,3 +32,7 @@ temp/
 
 # ignore logs
 *.log
+
+# ignore cernbox sync files
+*.sync_journal.db
+*.sync_journal.db-wal
