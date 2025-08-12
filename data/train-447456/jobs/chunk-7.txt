@@ -1,0 +1,15 @@
+~/Desktop/run3-OO-jpsi/data/train-447456/hy_2386344/005/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-447456/hy_2386344/006/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-447456/hy_2386344/007/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-447456/hy_2386344/008/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-447456/hy_2386344/009/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-447456/hy_2386344/010/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-447456/hy_2386344/011/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-447456/hy_2386344/012/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-447456/hy_2386344/013/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-447456/hy_2386344/014/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-447456/hy_2386344/015/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-447456/hy_2386344/016/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-447456/hy_2386344/017/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-447456/hy_2386344/018/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-447456/hy_2386344/019/AO2D.root
