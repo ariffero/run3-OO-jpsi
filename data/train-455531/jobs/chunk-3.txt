@@ -1,0 +1,15 @@
+~/Desktop/run3-OO-jpsi/data/train-455531/hy_2466143/019/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-455531/hy_2466143/020/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-455531/hy_2466143/021/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-455531/hy_2466143/022/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-455531/hy_2466143/023/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-455531/hy_2466143/024/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-455531/hy_2466143/025/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-455531/hy_2466143/026/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-455531/hy_2466144/001/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-455531/hy_2466144/002/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-455531/hy_2466144/003/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-455531/hy_2466144/004/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-455531/hy_2466144/005/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-455531/hy_2466144/006/AO2D.root
+~/Desktop/run3-OO-jpsi/data/train-455531/hy_2466144/007/AO2D.root
