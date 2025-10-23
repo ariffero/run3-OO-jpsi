@@ -31,6 +31,12 @@ def main():
     help='Analysis executable (default: o2-analysis-ud-fwd-muons-upc)'
   )
   parser.add_argument(
+    '--sw',
+    dest='services',
+    nargs='+',  # Allow multiple arguments
+    help='Additional services to pipe the analysis through (space separated)'
+  )
+  parser.add_argument(
     '-t', '--data-type',
     dest='data_type',
     choices=['reco', 'gen', 'data'],
@@ -125,19 +131,32 @@ def main():
 
   # Build analysis command
   if use_config:
-    cmd_analysis = (
-      f"{script} --configuration json://{json_path} "
-      f"--aod-writer-json {writer_json_dst} -b"
-    )
+    base_cmd = f"{script} --configuration json://{json_path}"
+    cmd_analysis = base_cmd
+    
+    # Add services if specified
+    if args.services:
+      for service in args.services:
+        cmd_analysis += f" | {service} --configuration json://{json_path}"
+    
+    # Add final writer configuration
+    cmd_analysis += f" --aod-writer-json {writer_json_dst} -b"
+    
     base = os.path.splitext(os.path.basename(json_file))[0]
     output_root = os.path.join(cwd, f"{base}-AnalysisResults.root")
     merge_output = f"{base}-tree.root"
   else:
-    writer_json = writer_json_dst
-    cmd_analysis = (
-      f"{script} --aod-file {data_path} "
-      f"--aod-writer-json {writer_json} -b"
-    )
+    base_cmd = f"{script} --aod-file {data_path}"
+    cmd_analysis = base_cmd
+    
+    # Add services if specified
+    if args.services:
+      for service in args.services:
+        cmd_analysis += f" | {service} --aod-file {data_path}"
+    
+    # Add final writer configuration
+    cmd_analysis += f" --aod-writer-json {writer_json} -b"
+    
     output_root = os.path.join(cwd, 'AnalysisResults.root')
     merge_output = 'data-tree.root' if data_type=='data' else f"{data_type}-tree.root"
 
