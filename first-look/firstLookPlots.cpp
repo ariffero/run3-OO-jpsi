@@ -81,9 +81,17 @@ void firstLookPlots(string dataType = "OO_full_pt"){
     lowPt = 0;
     upPt  = 0.25;
   }
+  else if(dataType == "OO_apass1_coh"){
+    filePath = "../data/train-455531/data-OO-full-pt-tree.root";
+    treePath = "DF_2423890593933632/dimu";
+    outputFile = "fl-455531-wide-mass.root";
+
+    lowPt = 0;
+    upPt  = 0.25;
+  }
 
   // apply kinematic cuts?
-  bool applyKine = false;
+  bool applyKine = true;
 
   if(!filesystem::exists(filePath)){
     cout<<"The file "<<filePath<<" does not exist."<<endl;
@@ -168,7 +176,8 @@ void firstLookPlots(string dataType = "OO_full_pt"){
   hMass->Draw("pe");
 
   latex.DrawLatex(0.15, 0.85, "#bf{Coherent J/#psi in UPC at fwd rapidity}");
-  latex.DrawLatex(0.55, -0.15+0.8,  Form("Full cpass0 sample"));
+  if(dataType == "OO_full_cpass0_coh") latex.DrawLatex(0.55, -0.15+0.8,  Form("Full cpass0 sample"));
+  if(dataType == "OO_apass1_coh") latex.DrawLatex(0.55, -0.15+0.8,  Form("Full apass1 sample"));
   latex.DrawLatex(0.55, -0.15+0.75, Form("p_{T} < %.2f GeV",upPt));
   latex.DrawLatex(0.55, -0.15+0.7,  Form("%.1f < y_{#mu#mu} < %.2f GeV",lowRap,upRap));
   latex.DrawLatex(0.55, -0.15+0.65, Form("J/#psi cands. (m_{#mu#mu}#in [2.9, 3.3]) = %d",(int)inRange));
